@@ -3,7 +3,7 @@ React = require('react')
 TreeNode = React.createClass({
   getInitialState: ->
     isRoot = this._mountDepth == 0
-    return {unlocked: isRoot, visible: false}
+    return {level: 0, unlocked: isRoot, visible: false}
 
 
   render: ->
@@ -28,8 +28,9 @@ TreeNode = React.createClass({
 
     return (
       <div className="upgrade">
-        <div onClick={this.toggle} className={className}>
+        <div onClick={this.addLevel} className={className}>
           {this.props.node.title}
+          {this.state.level}
           <span className="max-levels">{this.props.node.maxLevels}</span>
         </div>
         <ul style={style}>
@@ -43,6 +44,13 @@ TreeNode = React.createClass({
 
   unlock: ->
     this.setState({unlocked: !this.state.unlocked})
+
+  addLevel: ->
+    this.setState({level: this.state.level + 1})
+
+  subtractLevel: ->
+    this.setState({unlocked: this.state.level - 1})
+
 
 })
 
