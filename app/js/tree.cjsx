@@ -7,7 +7,6 @@ TreeNode = React.createClass({
 
 
   render: ->
-    console.log this.state
     className = "item no-children"
 
     hasChildren = this.props.node.childNodes?
