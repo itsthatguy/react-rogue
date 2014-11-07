@@ -1,11 +1,16 @@
+$black = #3f3f43;
+$grey  = #7f7f85;
+$green = #3fba53;
+$white = #efeff3;
+
 body {
   font-family: sans-serif;
 }
 .no-children {
-  color: #3f3f43;
+  color: $black;
 }
 .has-children {
-  color: #3fba53;
+  color: $green;
 
   &:after {
     content: '+';
@@ -17,7 +22,23 @@ body {
 }
 
 .item {
+  cursor: pointer;
   margin-bottom: 5px;
+  .max-levels {
+    background: $grey;
+    border-radius: 1000px;
+    box-sizing: border-box;
+    color: $white;
+    display: inline-block;
+    font-size: 12px;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center;
+    padding-top: 3px;
+    vertical-align: bottom;
+    width: 20px;
+  }
 }
 
 ul {
