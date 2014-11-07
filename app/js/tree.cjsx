@@ -3,8 +3,8 @@ React = require('react')
 TreeNode = React.createClass({
   getInitialState: ->
     isRoot = this._mountDepth == 0
-    return {level: 0, unlocked: isRoot, visible: false}
-
+    level = this.props.node.level || 0
+    return {level: level, locked: !isRoot, visible: false}
 
   render: ->
     className = "item no-children"
@@ -21,16 +21,15 @@ TreeNode = React.createClass({
       else
         className += " closed"
 
-
     style = {}
-    if (!this.state.visible)
+    if (this.state.locked)
       style.display = "none"
 
     return (
       <div className="upgrade">
         <div onClick={this.addLevel} className={className}>
           {this.props.node.title}
-          {this.state.level}
+          <span className="level">{this.state.level}</span>
           <span className="max-levels">{this.props.node.maxLevels}</span>
         </div>
         <ul style={style}>
@@ -42,20 +41,25 @@ TreeNode = React.createClass({
   toggle: ->
     this.setState({visible: !this.state.visible})
 
-  unlock: ->
-    this.setState({unlocked: !this.state.unlocked})
+  lock: (lock) ->
+    return if lock == this.state.locked
+    lock = lock || !this.state.locked
+    this.setState({locked: lock})
 
   addLevel: ->
-    this.setState({level: this.state.level + 1})
+    level = this.state.level + 1
+    return if level > this.props.node.maxLevels
+    this.lock(false) if level > 0
+    this.setState({level: level})
 
   subtractLevel: ->
-    this.setState({unlocked: this.state.level - 1})
-
-
+    level = this.state.level - 1
+    return if level <= 0
+    this.setState({level: level})
 })
 
 tree =
-  {title: "Smithy", maxLevels: 1, childNodes: [
+  {title: "Smithy", level: 1, maxLevels: 1, childNodes: [
     {title: "Health Up", maxLevels: 1, childNodes: [
       {title: "Paladin Upgrade", maxLevels: 1, childNodes: [
         {title: "Equip Up", maxLevels: 50, childNodes: [
