@@ -1,0 +1,32 @@
+body {
+  font-family: sans-serif;
+}
+.no-children {
+  color: #3f3f43;
+}
+.has-children {
+  color: #3fba53;
+
+  &:after {
+    content: '+';
+    display: inline-block;
+    position: relative;
+    height: 100%;
+    width: 20px;
+  }
+}
+
+.item {
+  margin-bottom: 5px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0 0 15px;
+  text-indent: 0;
+
+  li {
+    text-indent: 0;
+  }
+}

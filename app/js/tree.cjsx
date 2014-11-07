@@ -2,24 +2,25 @@ React = require('react')
 
 TreeNode = React.createClass({
   getInitialState: ->
-    return {
-      visible: true
-    }
+    isRoot = this._mountDepth == 0
+    return {unlocked: isRoot, visible: false}
+
 
   render: ->
-    childNodes
-    className = ""
+    console.log this.state
+    className = "item no-children"
 
-    console.log this.props.node.childNodes
-    if (this.props.node.childNodes != undefined)
+    hasChildren = this.props.node.childNodes?
+
+    if hasChildren
       childNodes = this.props.node.childNodes.map (node, index) ->
         return (<li key={index}><TreeNode node={node} /></li>)
 
-      className = "togglable"
+      className = "item has-children"
       if (this.state.visible)
-        className += " togglable-down"
+        className += " open"
       else
-        className += " togglable-up"
+        className += " closed"
 
 
     style = {}
@@ -27,10 +28,10 @@ TreeNode = React.createClass({
       style.display = "none"
 
     return (
-      <div>
-        <h5 onClick={this.toggle} className={className}>
+      <div className="upgrade">
+        <div onClick={this.toggle} className={className}>
           {this.props.node.title}
-        </h5>
+        </div>
         <ul style={style}>
           {childNodes}
         </ul>
@@ -40,18 +41,18 @@ TreeNode = React.createClass({
   toggle: ->
     this.setState({visible: !this.state.visible})
 
+  unlock: ->
+    this.setState({unlocked: !this.state.unlocked})
+
 })
 
 tree =
-  title: "howdy",
-  childNodes: [
-    {title: "Smithy", childNodes: [
-      {title: "Health Up", childNodes: [
-        {title: "Paladin Upgrade", childNodes: [
-          {title: "Equip Up", childNodes: [
-            {title: "Enchantress", childNodes: [
-              {title: "Magic Damage Up", childNodes: [
-              ]}
+  {title: "Smithy", childNodes: [
+    {title: "Health Up", childNodes: [
+      {title: "Paladin Upgrade", childNodes: [
+        {title: "Equip Up", childNodes: [
+          {title: "Enchantress", childNodes: [
+            {title: "Magic Damage Up"}
               {title: "Archmage Upgrade", childNodes: [
                 {title: "Miner Unlock", childNodes: [
                   {title: "Assassin Upgrade", childNodes: [
@@ -72,7 +73,7 @@ tree =
                   {title: "Gold Gain Up"}
                 ]}
               ]}
-            ]}
+          ]}
             {title: "Architect", childNodes: [
               {title: "Attack Up"}
               {title: "Barbarian King Upgrade", childNodes: [
@@ -92,11 +93,10 @@ tree =
                 ]}
               ]}
             ]}
-          ]}
         ]}
       ]}
     ]}
-  ]
+  ]}
 
 
 React.render(
